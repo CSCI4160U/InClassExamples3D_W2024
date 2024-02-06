@@ -35,7 +35,7 @@ public class FirstPersonController : MonoBehaviour
     private void Update() {
         // ground check
         RaycastHit collision;
-        if (Physics.Raycast(groundPosition.position, Vector3.down, out collision, 0.2f, groundLayers)) {
+        if (Physics.Raycast(groundPosition.position, Vector3.down, out collision, 0.1f, groundLayers)) {
             isGrounded = true;
         } else {
             isGrounded = false;
@@ -64,11 +64,11 @@ public class FirstPersonController : MonoBehaviour
         Vector3 z = Vector3.zero;
 
         // jumping
-        if (isGrounded && Input.GetButtonDown("Jump")) {
+        if (!isGrounded) {
+            y = transform.up * verticalSpeed;
+        } else if (Input.GetButtonDown("Jump")) { 
             verticalSpeed = jumpSpeed;
             isGrounded = false;
-            y = transform.up * verticalSpeed;
-        } else if (!isGrounded) {
             y = transform.up * verticalSpeed;
         }
 
@@ -78,8 +78,6 @@ public class FirstPersonController : MonoBehaviour
             z = transform.forward * Input.GetAxis("Vertical") * movementSpeed;
         }
 
-        Vector3 movement = x + y + z; 
-        movement *= Time.deltaTime;
-        characterController.Move(movement);
+        characterController.Move((x + y + z) * Time.deltaTime);
     }
 }
