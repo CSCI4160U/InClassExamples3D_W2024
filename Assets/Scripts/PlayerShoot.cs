@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class PlayerShoot : MonoBehaviour
 {
@@ -20,15 +21,21 @@ public class PlayerShoot : MonoBehaviour
         RaycastHit hit;
 
         if (Physics.Raycast(cam.position, cam.forward, out hit, range, enemymask)) {
-            Debug.Log("Hit an enemy: " + hit.collider.name);
+            Debug.Log("Ht an enemy: " + hit.collider.name);
 
             Health enemyHealth = hit.collider.GetComponent<Health>();
             if (enemyHealth != null) {
                 enemyHealth.TakeDamage(25);
-                if (enemyHealth.IsDead()) {
-                    Animator enemyAnimator = hit.collider.GetComponent<Animator>();
-                    if (enemyAnimator != null) {
+                Animator enemyAnimator = hit.collider.GetComponent<Animator>();
+                if (enemyAnimator != null) {
+                    if (enemyHealth.IsDead()) {
                         enemyAnimator.SetBool("IsDead", true);
+                        Rig interactRig = hit.collider.GetComponentInChildren<Rig>();
+                        if (interactRig != null) {
+                            interactRig.weight = 0f;
+                        }
+                    } else {
+                        enemyAnimator.SetTrigger("Hit");
                     }
                 }
             }
