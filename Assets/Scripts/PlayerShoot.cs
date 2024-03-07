@@ -21,7 +21,7 @@ public class PlayerShoot : MonoBehaviour
         RaycastHit hit;
 
         if (Physics.Raycast(cam.position, cam.forward, out hit, range, enemymask)) {
-            Debug.Log("Ht an enemy: " + hit.collider.name);
+            //Debug.Log("Ht an enemy: " + hit.collider.name);
 
             Health enemyHealth = hit.collider.GetComponent<Health>();
             if (enemyHealth != null) {
@@ -40,7 +40,7 @@ public class PlayerShoot : MonoBehaviour
                 }
             }
         } else if (Physics.Raycast(cam.position, cam.forward, out hit, range, wallMask)) {
-            Debug.Log("Hit a structure: " + hit.collider.name);
+            //Debug.Log("Hit a structure: " + hit.collider.name);
             if (bulletHolePrefab != null) {
                 Instantiate(bulletHolePrefab, hit.point + (0.01f * hit.normal), Quaternion.LookRotation(-1 * hit.normal, hit.transform.up));
             }

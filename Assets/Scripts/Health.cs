@@ -6,14 +6,26 @@ public class Health : MonoBehaviour
     [SerializeField] [Range(0, 100)] private int hp = 100;
     [SerializeField] private bool isDead = false;
 
+    private Animator animator = null;
+
+    private void Awake() {
+        animator = GetComponent<Animator>();
+    }
+
     public void TakeDamage(int damageAmount) {
         this.hp -= damageAmount;
 
         if (this.hp <= 0) {
             this.hp = 0;
             this.isDead = true;
+            if (animator != null) {
+                animator.SetBool("IsDead", true);
+            }
         } else {
             this.isDead = false;
+            if (animator != null) {
+                animator.SetTrigger("Hit");
+            }
         }
     }
 
