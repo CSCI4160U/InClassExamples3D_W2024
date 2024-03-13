@@ -6,7 +6,7 @@ public class Health : MonoBehaviour
     [SerializeField] [Range(0, 100)] private int hp = 100;
     [SerializeField] private bool isDead = false;
 
-    private Animator animator = null;
+    protected Animator animator = null;
 
     private void Awake() {
         animator = GetComponent<Animator>();
@@ -21,6 +21,7 @@ public class Health : MonoBehaviour
             if (animator != null) {
                 animator.SetBool("IsDead", true);
             }
+            HandleDeath();
         } else {
             this.isDead = false;
             if (animator != null) {
@@ -30,4 +31,8 @@ public class Health : MonoBehaviour
     }
 
     public bool IsDead() { return this.isDead; }
+
+    public virtual void HandleDeath() {
+        // do nothing
+    }
 }
