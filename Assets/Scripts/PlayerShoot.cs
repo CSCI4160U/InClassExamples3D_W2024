@@ -7,6 +7,7 @@ public class PlayerShoot : MonoBehaviour
     [SerializeField] private LayerMask wallMask;
     [SerializeField] private LayerMask enemyMask;
     [SerializeField] private LayerMask barrelMask;
+    [SerializeField] private LayerMask shieldMask;
 
     [SerializeField] private float range = 100f;
     [SerializeField] private Animator gunAnimator;
@@ -21,10 +22,15 @@ public class PlayerShoot : MonoBehaviour
     private void Shoot() {
         RaycastHit hit;
 
-        if (Physics.Raycast(cam.position, cam.forward, out hit, range, enemyMask)) {
-            //Debug.Log("Ht an enemy: " + hit.collider.name);
+        if (Physics.Raycast(cam.position, cam.forward, out hit, range, shieldMask)) {
+            EnergyShield energyShield = hit.collider.GetComponent<EnergyShield>();
+            if (energyShield != null) {
+                energyShield.RegisterHit(10, hit.point);
+            }
+        } else if (Physics.Raycast(cam.position, cam.forward, out hit, range, enemyMask)) {
+                //Debug.Log("Ht an enemy: " + hit.collider.name);
 
-            Health enemyHealth = hit.collider.GetComponent<Health>();
+                Health enemyHealth = hit.collider.GetComponent<Health>();
             if (enemyHealth != null) {
                 enemyHealth.TakeDamage(25);
                 Animator enemyAnimator = hit.collider.GetComponent<Animator>();
